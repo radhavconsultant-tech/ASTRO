@@ -22,6 +22,12 @@ Point = `{ longitude (sidereal 0–360), sign, sign_index, sign_lord, degree_in_
 ## POST /api/dasha  → `kp-dasha/1.0`
 Same request as /api/chart. Response: `{ system, year_days, birth_utc, moon: Point, nakshatra, balance: {lord, years}, mahadashas: [{lord, start, end, years, bhuktis: [{lord, start, end, years, antaras: [{lord, start, end, years}]}]}], levels: {available, unavailable}, calc_ms }` (dates are UTC ISO).
 
+## POST /api/sade-sati  → `kp-sadesati/1.0`
+Same request as /api/chart. Response: `{ moon: Point, moon_sign, signs: {rising, peak, setting}, range_years, cycles: [{start, end, years, in_progress_at_birth, phases: [{phase, label, sign, start, end, entries}], segments: [{phase, sign, start, end, retrograde_entry}], path: [{t, lon, r}]}], calc_ms }`
+
+## POST /api/ruling  → `kp-ruling/1.0`
+Request `{ utc? (ISO, default now), latitude, longitude, tz }`. Response: `{ local, weekday, sunrise_local, before_sunrise, ascendant: Point, moon: Point, ruling: [{role, key, planet}], unique: [planet], notes, calc_ms }`
+
 ## GET /api/sky?utc=ISO  → `kp-sky/1.0`
 - `heliocentric`: `{ Mercury..Neptune, Earth: {longitude (tropical), latitude, distance_au}, Moon: {geocentric: true, ...} }`
 - `geocentric_sidereal`: `{ Name: Point + {retrograde, speed} }` incl. Rahu, Ketu, Uranus, Neptune

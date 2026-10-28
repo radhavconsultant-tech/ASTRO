@@ -1,6 +1,6 @@
 import { format, differenceInDays } from "date-fns";
 
-export const parse = (iso) => new Date(iso.length <= 19 ? `${iso}Z` : iso);
+export const parse = (iso) => new Date(/([zZ]|[+-]\d\d:\d\d)$/.test(iso) ? iso : `${iso}Z`);
 export const fmt = (iso) => format(parse(iso), "dd MMM yyyy");
 
 export const findActive = (list, ref) =>

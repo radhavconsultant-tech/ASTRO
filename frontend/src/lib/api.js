@@ -25,6 +25,16 @@ export const fetchDasha = async (c) => {
   return data;
 };
 
+export const fetchSadeSati = async (c) => {
+  const { data } = await need().post("/sade-sati", chartBody(c));
+  return data;
+};
+
+export const fetchRuling = async (body) => {
+  const { data } = await need().post("/ruling", body);
+  return data;
+};
+
 export const fetchSky = async (iso) => {
   const { data } = await need().get("/sky", { params: { utc: iso } });
   return data;

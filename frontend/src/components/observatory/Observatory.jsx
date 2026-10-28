@@ -1,8 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Tag, Sparkles } from "lucide-react";
+import { Tag, Sparkles, Orbit } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { fetchSky } from "@/lib/api";
+import { useDasha, useSadeSati, cycleFor } from "@/lib/hooks";
+import { findActive } from "@/components/dasha/dashaUtils";
+import { PLANET_COLOR, SIGNS } from "@/lib/kp";
 import { TimePanel, stepDate } from "./TimePanel";
 import { PlanetInspector } from "./PlanetInspector";
 import { StaticSky } from "./StaticSky";
@@ -30,8 +33,22 @@ const Chip = ({ on, set, testId, children }) => (
   </button>
 );
 
+const DashaChip = ({ md, ad, an, t }) => (
+  <div className="glass rounded-xl px-3 py-2" data-testid="observatory-dasha-chip">
+    <div className="text-[10px] uppercase tracking-[0.18em] text-slate-400">Running Dasha</div>
+    <div className="mt-0.5 flex items-center gap-1.5 text-sm font-medium">
+      {[md, ad, an].filter(Boolean).map((p, i) => (
+        <span key={i} className="flex items-center gap-1.5">
+          {i > 0 && <span className="text-slate-600">›</span>}
+          <span style={{ color: PLANET_COLOR[p.lord] }} data-testid={`observatory-dasha-${["md", "ad", "an"][i]}`}>{t(p.lord)}</span>
+        </span>
+      ))}
+    </div>
+  </div>
+);
+
 export function Observatory({ hero, intro, children }) {
-  const { chartData, reducedMotion, t } = useApp();
+  const { chartData, reducedMotion, t, active } = useApp();
   const [view, setView] = useState("helio");
   const [dt, setDtRaw] = useState(() => roundMin(new Date()));
   const [playing, setPlaying] = useState(false);
@@ -39,6 +56,7 @@ export function Observatory({ hero, intro, children }) {
   const [selected, setSelected] = useState(null);
   const [showNatal, setShowNatal] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
+  const [showSade, setShowSade] = useState(false);
   const [visible, setVisible] = useState(true);
   const [gl] = useState(hasWebGL);
   const box = useRef(null);
@@ -46,6 +64,13 @@ export function Observatory({ hero, intro, children }) {
   const iso = dt.toISOString();
 
   const sky = useQuery({ queryKey: ["sky", iso], queryFn: () => fetchSky(iso), placeholderData: (p) => p, staleTime: Infinity, retry: 1 });
+  const dq = useDasha(active);
+  const md = findActive(dq.data?.mahadashas, dt);
+  const ad = findActive(md?.bhuktis, dt);
+  const an = findActive(ad?.antaras, dt);
+  const sq = useSadeSati(active, showSade);
+  const sadeCycle = showSade ? cycleFor(sq.data?.cycles, dt) : null;
+  const sadeSigns = sq.data ? { rising: SIGNS.indexOf(sq.data.signs.rising), peak: SIGNS.indexOf(sq.data.signs.peak), setting: SIGNS.indexOf(sq.data.signs.setting) } : null;
 
   useEffect(() => {
     if (!playing) return undefined;
@@ -75,7 +100,8 @@ export function Observatory({ hero, intro, children }) {
         {gl ? (
           <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-slate-400">Loading observatory…</div>}>
             <ObservatoryScene view={view} sky={sky.data} natal={natal} showNatal={showNatal} showLabels={showLabels}
-              selected={selected} onSelect={onSelect} reduced={reducedMotion} active={visible} intro={intro} t={t} fallback={fallback} />
+              selected={selected} onSelect={onSelect} reduced={reducedMotion} active={visible} intro={intro} t={t} fallback={fallback}
+              sadePath={sadeCycle?.path} sadeSigns={sadeSigns} />
           </Suspense>
         ) : fallback}
 
@@ -87,8 +113,19 @@ export function Observatory({ hero, intro, children }) {
           <div className="flex gap-2">
             <Chip on={showLabels} set={setShowLabels} testId="toggle-labels"><Tag className="h-3.5 w-3.5" />Labels</Chip>
             {view === "geo" && <Chip on={showNatal} set={setShowNatal} testId="toggle-natal"><Sparkles className="h-3.5 w-3.5" />{t("natal")}</Chip>}
+            {view === "geo" && <Chip on={showSade} set={setShowSade} testId="toggle-sadesati"><Orbit className="h-3.5 w-3.5" />Sade Sati</Chip>}
           </div>
         </div>
+        {md && (
+          <div className={`absolute right-3 sm:right-4 ${hero ? "top-28 sm:bottom-4 sm:top-auto" : "bottom-3 sm:bottom-4"}`}>
+            <DashaChip md={md} ad={ad} an={an} t={t} />
+            {showSade && sadeCycle && view === "geo" && (
+              <div className="glass mt-2 rounded-xl px-3 py-2 text-[11px] text-slate-300" data-testid="observatory-sadesati-note">
+                Saturn path {sadeCycle.start.slice(0, 4)}–{sadeCycle.end.slice(0, 4)} · <span className="text-cyan-300">12th</span> · <span className="text-amber-200">Moon</span> · <span className="text-amber-500">2nd</span>
+              </div>
+            )}
+          </div>
+        )}
         <div className="absolute left-3 top-[3.6rem] sm:left-4 sm:top-4" data-testid="view-scale-note">
           <div className="glass rounded-md px-2.5 py-1 text-[11px] text-slate-300">
             {view === "helio" ? "Heliocentric · illustrative, not to scale" : "Geocentric · sidereal zodiac (KP) · nodes are points"}

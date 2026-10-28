@@ -14,6 +14,10 @@ const te = {
   dasha: "దశ", sadeSati: "ఏలినాటి శని", ruling: "రూలింగ్ గ్రహాలు", horary: "ప్రశ్న (1–249)", career: "వృత్తి",
   marriage: "వివాహం", finance: "ఆర్థికం", gemstones: "రత్నాలు", rudraksha: "రుద్రాక్ష", remedyModule: "పరిహారాలు",
   wellbeing: "ఆరోగ్యం", knowledge: "జ్ఞాన గ్రంథాలయం", reports: "నివేదికలు",
+  mahadasha: "మహాదశ", bhukti: "భుక్తి", antara: "అంతర", balanceAtBirth: "జనన సమయ దశా శేషం",
+  birthDetails: "జనన వివరాలు", print: "ముద్రించండి", dashaSheet: "వింశోత్తరీ దశా పత్రం", start: "ప్రారంభం", end: "ముగింపు",
+  rising: "ఆరంభం (12వ)", peak: "శిఖరం (జన్మ రాశి)", setting: "అస్తమయం (2వ)", dayLord: "వార అధిపతి",
+  snapshot: "స్నాప్‌షాట్", live: "ప్రత్యక్షం",
   Sun: "సూర్యుడు", Moon: "చంద్రుడు", Mars: "కుజుడు", Mercury: "బుధుడు", Jupiter: "గురువు", Venus: "శుక్రుడు",
   Saturn: "శని", Rahu: "రాహువు", Ketu: "కేతువు", Uranus: "యురేనస్", Neptune: "నెప్ట్యూన్", Earth: "భూమి",
   Aries: "మేషం", Taurus: "వృషభం", Gemini: "మిథునం", Cancer: "కర్కాటకం", Leo: "సింహం", Virgo: "కన్య",
@@ -41,6 +45,10 @@ const en = {
   dasha: "Vimshottari Dasha", sadeSati: "Saturn & Sade Sati", ruling: "Ruling planets", horary: "Horary 1–249",
   career: "Career", marriage: "Marriage", finance: "Finance", gemstones: "Gemstones", rudraksha: "Rudraksha",
   remedyModule: "Remedies", wellbeing: "Wellbeing", knowledge: "Knowledge library", reports: "Reports",
+  mahadasha: "Mahadasha", bhukti: "Bhukti", antara: "Antara", balanceAtBirth: "Balance at birth",
+  birthDetails: "Birth details", print: "Print", dashaSheet: "Vimshottari Dasha sheet", start: "Start", end: "End",
+  rising: "Rising (12th)", peak: "Peak (Moon sign)", setting: "Setting (2nd)", dayLord: "Day lord",
+  snapshot: "Snapshot", live: "Live",
 };
 
 export const translate = (lang, key) => (lang === "te" ? te[key] : null) || en[key] || key;

@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 from kp_engine import build_chart, sky_positions, SOURCE, CONTRACT_VERSION
 from cities import search_cities
 from dasha import build_dasha
+from transits import build_sade_sati, build_ruling
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -71,6 +72,30 @@ async def chart(req: ChartRequest):
 async def dasha(req: ChartRequest):
     dt = _local_to_utc(req.date, req.time, req.tz, req.utc_offset)
     return build_dasha(dt)
+
+
+@api_router.post("/sade-sati")
+async def sade_sati(req: ChartRequest):
+    dt = _local_to_utc(req.date, req.time, req.tz, req.utc_offset)
+    return build_sade_sati(dt)
+
+
+class RulingRequest(BaseModel):
+    utc: Optional[str] = None
+    latitude: float = Field(ge=-66.5, le=66.5)
+    longitude: float = Field(ge=-180, le=180)
+    tz: str
+
+
+@api_router.post("/ruling")
+async def ruling(req: RulingRequest):
+    try:
+        dt = datetime.fromisoformat(req.utc.replace("Z", "+00:00")) if req.utc else datetime.now(timezone.utc)
+        ZoneInfo(req.tz)
+    except Exception:
+        raise HTTPException(400, "Invalid utc or time zone")
+    dt = dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
+    return build_ruling(dt, req.latitude, req.longitude, req.tz)
 
 
 @api_router.get("/sky")

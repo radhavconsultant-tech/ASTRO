@@ -2,7 +2,7 @@ import { Component, Suspense, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import * as THREE from "three";
-import { Body, BODY_NAMES, CameraRig, HelioOrbits, SunLight, ZodiacRing } from "./SceneParts";
+import { Body, BODY_NAMES, CameraRig, HelioOrbits, SadeSatiOverlay, SunLight, ZodiacRing } from "./SceneParts";
 import { ABBR, KP_PLANETS, SIGNS } from "@/lib/kp";
 
 class GLBoundary extends Component {
@@ -21,7 +21,7 @@ export const hasWebGL = () => {
   }
 };
 
-export default function ObservatoryScene({ view, sky, natal, showNatal, showLabels, selected, onSelect, reduced, active, intro, t, fallback }) {
+export default function ObservatoryScene({ view, sky, natal, showNatal, showLabels, selected, onSelect, reduced, active, intro, t, fallback, sadePath, sadeSigns }) {
   const controls = useRef();
   const store = useRef({ pos: Object.fromEntries(BODY_NAMES.map((n) => [n, new THREE.Vector3()])), size: {} });
   const [hovered, setHovered] = useState(null);
@@ -49,6 +49,7 @@ export default function ObservatoryScene({ view, sky, natal, showNatal, showLabe
         </Suspense>
         {view === "helio" && <HelioOrbits />}
         {view === "geo" && <ZodiacRing lang="en" tSign={(i) => t(SIGNS[i])} natal={natalPts} showNatal={showNatal} />}
+        {view === "geo" && sadePath && <SadeSatiOverlay path={sadePath} signIdx={sadeSigns} />}
         <OrbitControls ref={controls} makeDefault enableDamping dampingFactor={0.08} minDistance={3} maxDistance={260} />
         <CameraRig controls={controls} store={store} selected={selected} view={view} reduced={reduced} intro={intro} />
       </Canvas>

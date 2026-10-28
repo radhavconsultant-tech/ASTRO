@@ -211,6 +211,22 @@ export const ZodiacRing = ({ lang, tSign, natal, showNatal }) => (
   </group>
 );
 
+export const SadeSatiOverlay = ({ path, signIdx }) => {
+  const pts = useMemo(() => (path || []).map((p, i, a) => toXZ(p.lon, 16.5 + (5 * i) / Math.max(1, a.length - 1))), [path]);
+  const colors = { rising: "#22D3EE", peak: "#E6C668", setting: "#F59E0B" };
+  return (
+    <group>
+      {Object.entries(signIdx).map(([k, i]) => (
+        <mesh key={k} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]}>
+          <ringGeometry args={[RING_R, RING_R + 3, 32, 1, (i * 30 * Math.PI) / 180, Math.PI / 6]} />
+          <meshBasicMaterial color={colors[k]} transparent opacity={0.22} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+      ))}
+      {pts.length > 1 && <Line points={pts} color="#F5C66B" lineWidth={1.6} transparent opacity={0.85} />}
+    </group>
+  );
+};
+
 export function CameraRig({ controls, store, selected, view, reduced, intro }) {
   const { camera } = useThree();
   const anim = useRef({ t: 0, active: true, slow: intro && !reduced });

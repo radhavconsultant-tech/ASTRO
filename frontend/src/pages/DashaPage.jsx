@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
+import { Printer } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeader, Reveal } from "@/components/common";
 import { DashaTimeline } from "@/components/dasha/DashaTimeline";
@@ -8,7 +9,7 @@ import { CurrentPeriods } from "@/components/dasha/CurrentPeriods";
 import { BhuktiList } from "@/components/dasha/BhuktiList";
 import { findActive, fmt, ymd } from "@/components/dasha/dashaUtils";
 import { useApp } from "@/context/AppContext";
-import { fetchDasha } from "@/lib/api";
+import { useDasha } from "@/lib/hooks";
 import { PLANET_COLOR } from "@/lib/kp";
 
 export default function DashaPage() {
@@ -17,10 +18,7 @@ export default function DashaPage() {
   const [sel, setSel] = useState(null);
   const [openAd, setOpenAd] = useState(null);
 
-  const q = useQuery({
-    queryKey: ["dasha", active.id, active.date, active.time, active.latitude, active.longitude, active.tz, active.utc_offset],
-    queryFn: () => fetchDasha(active), staleTime: Infinity, retry: 1,
-  });
+  const q = useDasha(active);
   const d = q.data;
 
   const cur = useMemo(() => {
@@ -56,6 +54,10 @@ export default function DashaPage() {
             </label>
             <button onClick={() => setRefDate(new Date())} data-testid="dasha-ref-today"
               className="focus-ring rounded-md border border-white/10 px-3 py-1.5 text-sm text-slate-300 hover:border-amber-400/50 hover:text-amber-100">Today</button>
+            <Link to="/print/dasha" data-testid="dasha-print-link"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-md bg-amber-300 px-3 py-1.5 text-sm font-semibold text-[#0b0f19] hover:bg-amber-200">
+              <Printer className="h-4 w-4" />{t("print")}
+            </Link>
           </div>
         }>
         Vimshottari periods from the natal Moon in <span className="text-amber-100">{t(d.nakshatra)}</span> ({t(d.moon.sign)} <span className="font-data">{d.moon.dms}</span>).

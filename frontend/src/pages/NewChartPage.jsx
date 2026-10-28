@@ -16,7 +16,7 @@ const Field = ({ label, children, hint }) => (
   </label>
 );
 
-const CitySearch = ({ city, setCity }) => {
+export const CitySearch = ({ city, setCity }) => {
   const [q, setQ] = useState(city ? city.name : "");
   const [res, setRes] = useState([]);
   const [open, setOpen] = useState(false);

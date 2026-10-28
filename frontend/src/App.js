@@ -12,6 +12,9 @@ import ExplorerPage from "@/pages/ExplorerPage";
 import NewChartPage from "@/pages/NewChartPage";
 import ModulePage from "@/pages/ModulePage";
 import DashaPage from "@/pages/DashaPage";
+import SadeSatiPage from "@/pages/SadeSatiPage";
+import RulingPage from "@/pages/RulingPage";
+import DashaPrint from "@/pages/DashaPrint";
 
 function Shell() {
   const [collapsed, setCollapsed] = useState(false);
@@ -28,6 +31,10 @@ function Shell() {
             <Route path="/charts/new" element={<NewChartPage />} />
             <Route path="/dasha" element={<DashaPage />} />
             <Route path="/modules/dasha" element={<Navigate to="/dasha" replace />} />
+            <Route path="/sade-sati" element={<SadeSatiPage />} />
+            <Route path="/modules/sade-sati" element={<Navigate to="/sade-sati" replace />} />
+            <Route path="/ruling" element={<RulingPage />} />
+            <Route path="/modules/ruling-planets" element={<Navigate to="/ruling" replace />} />
             <Route path="/modules/:id" element={<ModulePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
@@ -42,7 +49,10 @@ export default function App() {
     <BrowserRouter>
       <AppProvider>
         <TooltipProvider delayDuration={200}>
-          <Shell />
+          <Routes>
+            <Route path="/print/dasha" element={<DashaPrint />} />
+            <Route path="*" element={<Shell />} />
+          </Routes>
           <Toaster theme="dark" position="bottom-right" />
         </TooltipProvider>
       </AppProvider>
