@@ -7,6 +7,7 @@ import { ChartWheel } from "@/components/chart/ChartWheel";
 import { PlanetTable, CuspTable } from "@/components/chart/Tables";
 import { SignificatorView } from "@/components/chart/SignificatorView";
 import { DetailPanel } from "@/components/chart/DetailPanel";
+import { HoraryAnalysis } from "@/components/chart/HoraryAnalysis";
 import { PageHeader, Reveal } from "@/components/common";
 import { useApp } from "@/context/AppContext";
 
@@ -60,6 +61,7 @@ export default function ExplorerPage() {
         )}
       </PageHeader>
       <Meta data={chartData} />
+      {chartData.horary && <HoraryAnalysis chart={chartData} onSelect={onSelect} />}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <Reveal className="panel p-3 sm:p-5 lg:col-span-7">

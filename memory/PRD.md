@@ -25,6 +25,10 @@ App shell (collapsible nav, chart selector, quick search ⌘K, EN/Telugu labels,
 - Node agency: Rahu/Ketu act for sign lord, planets conjoined ≤ 3°20′, planets aspecting their sign (7th; Mars 4/8, Jupiter 5/9, Saturn 3/10); planet view 'Agency' column, house view dashed chips, toggle in Explorer; ruling planets add nodes in sign/star of an RP, conjoined or aspected.
 - Full chart report (/print/report): 3-page A4 (wheel, key facts, planets, cusps, significators both views with agency, Dasha), EN/Telugu.
 - Dashboard transit alerts: POST /api/transits — Saturn & Jupiter sidereal ingresses next 3 years incl. retro, houses from natal Moon & Asc, Sade Sati tags.
+- Career page (/career): cusps 2/6/10/11 sub-lords + significations (cusp-based + agency), house significators, Dasha Bhuktis (next 25y) where both lords link to 2/6/10/11. Connections only, no verdicts.
+- Horary analysis panel in Explorer: topic → relevant cusp (standard KP house groups in lib/sig.js), sub-lord & star-lord significations, house significators. Topic chosen when casting.
+- Compare charts (/compare): two saved charts, mini wheels, planet + cusp star/sub lord matching with counts.
+- Transit calendar (/transits): month grid of Saturn/Jupiter ingresses, jump to previous/next change.
 
 ## Backlog
 - P1 (Phase 2): complete. Next is Phase 3.
@@ -32,4 +36,4 @@ App shell (collapsible nav, chart selector, quick search ⌘K, EN/Telugu labels,
 - Nice-to-have: node agency rules for Rahu/Ketu significators, more cities / geocoding.
 
 ## Next tasks
-Career / marriage / finance topic modules once the user's rule engine is connected; report history.
+Marriage / finance pages (same pattern as Career); report history; user's rule engine.

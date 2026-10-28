@@ -17,6 +17,9 @@ import RulingPage from "@/pages/RulingPage";
 import DashaPrint from "@/pages/DashaPrint";
 import ReportPrint from "@/pages/ReportPrint";
 import HoraryPage from "@/pages/HoraryPage";
+import CareerPage from "@/pages/CareerPage";
+import ComparePage from "@/pages/ComparePage";
+import TransitCalendarPage from "@/pages/TransitCalendarPage";
 
 function Shell() {
   const [collapsed, setCollapsed] = useState(false);
@@ -37,6 +40,10 @@ function Shell() {
             <Route path="/modules/sade-sati" element={<Navigate to="/sade-sati" replace />} />
             <Route path="/ruling" element={<RulingPage />} />
             <Route path="/horary" element={<HoraryPage />} />
+            <Route path="/career" element={<CareerPage />} />
+            <Route path="/modules/career" element={<Navigate to="/career" replace />} />
+            <Route path="/compare" element={<ComparePage />} />
+            <Route path="/transits" element={<TransitCalendarPage />} />
             <Route path="/modules/horary" element={<Navigate to="/horary" replace />} />
             <Route path="/modules/ruling-planets" element={<Navigate to="/ruling" replace />} />
             <Route path="/modules/:id" element={<ModulePage />} />

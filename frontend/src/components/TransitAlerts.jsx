@@ -1,5 +1,6 @@
 import { differenceInCalendarDays } from "date-fns";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { useTransits } from "@/lib/hooks";
 import { fmt, parse } from "@/components/dasha/dashaUtils";
@@ -16,7 +17,7 @@ export const TransitAlerts = () => {
     <div data-testid="transit-alerts">
       <div className="eyebrow">Upcoming transits · {active.name}</div>
       <h2 className="mt-2 font-display text-3xl font-semibold text-amber-50">Saturn & Jupiter sign changes</h2>
-      <p className="mt-1 text-sm text-slate-400">Next 3 years, sidereal (KP). Houses are counted by sign from the natal Moon and Ascendant.</p>
+      <p className="mt-1 text-sm text-slate-400">Next 3 years, sidereal (KP). Houses are counted by sign from the natal Moon and Ascendant. <Link to="/transits" className="text-amber-200 hover:underline" data-testid="transit-open-calendar">Open the calendar →</Link></p>
       {!d ? <div className="panel mt-6 p-6 text-sm text-slate-400">Calculating…</div> : (
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
           <div className="space-y-3 lg:col-span-4">

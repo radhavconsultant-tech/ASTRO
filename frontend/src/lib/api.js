@@ -45,6 +45,8 @@ export const fetchTransits = async (c) => {
   return data;
 };
 
+export const fetchAnyChart = (c) => (c.kind === "horary" ? fetchHorary(c) : fetchChart(c));
+
 export const fetchRuling = async (body) => {
   const { data } = await need().post("/ruling", body);
   return data;

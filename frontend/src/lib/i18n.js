@@ -17,7 +17,7 @@ const te = {
   mahadasha: "మహాదశ", bhukti: "భుక్తి", antara: "అంతర", balanceAtBirth: "జనన సమయ దశా శేషం",
   birthDetails: "జనన వివరాలు", print: "ముద్రించండి", dashaSheet: "వింశోత్తరీ దశా పత్రం", start: "ప్రారంభం", end: "ముగింపు",
   rising: "ఆరంభం (12వ)", peak: "శిఖరం (జన్మ రాశి)", setting: "అస్తమయం (2వ)", dayLord: "వార అధిపతి",
-  snapshot: "స్నాప్‌షాట్", live: "ప్రత్యక్షం",
+  snapshot: "స్నాప్‌షాట్", live: "ప్రత్యక్షం", compare: "జాతకాల పోలిక", transitCalendar: "గోచార క్యాలెండర్",
   Sun: "సూర్యుడు", Moon: "చంద్రుడు", Mars: "కుజుడు", Mercury: "బుధుడు", Jupiter: "గురువు", Venus: "శుక్రుడు",
   Saturn: "శని", Rahu: "రాహువు", Ketu: "కేతువు", Uranus: "యురేనస్", Neptune: "నెప్ట్యూన్", Earth: "భూమి",
   Aries: "మేషం", Taurus: "వృషభం", Gemini: "మిథునం", Cancer: "కర్కాటకం", Leo: "సింహం", Virgo: "కన్య",
@@ -48,7 +48,7 @@ const en = {
   mahadasha: "Mahadasha", bhukti: "Bhukti", antara: "Antara", balanceAtBirth: "Balance at birth",
   birthDetails: "Birth details", print: "Print", dashaSheet: "Vimshottari Dasha sheet", start: "Start", end: "End",
   rising: "Rising (12th)", peak: "Peak (Moon sign)", setting: "Setting (2nd)", dayLord: "Day lord",
-  snapshot: "Snapshot", live: "Live",
+  snapshot: "Snapshot", live: "Live", compare: "Compare charts", transitCalendar: "Transit calendar",
 };
 
 export const translate = (lang, key) => (lang === "te" ? te[key] : null) || en[key] || key;

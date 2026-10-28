@@ -10,6 +10,7 @@ import { useApp } from "@/context/AppContext";
 import { fetchHorary, fetchHoraryTable } from "@/lib/api";
 import { nowIn } from "@/lib/hooks";
 import { PLANET_COLOR } from "@/lib/kp";
+import { TOPICS } from "@/lib/sig";
 
 const inputCls = "focus-ring w-full rounded-lg border border-white/10 bg-[#0b0f19] px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 [color-scheme:dark]";
 
@@ -73,6 +74,7 @@ export default function HoraryPage() {
   const rows = table.data || [];
   const [number, setNumber] = useState(1);
   const [question, setQuestion] = useState("");
+  const [topic, setTopic] = useState("job");
   const [useNow, setUseNow] = useState(true);
   const [moment, setMoment] = useState({ date: "", time: "" });
   const [city, setCity] = useState(active.tz && active.kind !== "horary"
@@ -85,7 +87,7 @@ export default function HoraryPage() {
   const cast = async () => {
     const m = useNow ? nowIn(city.tz) : moment;
     if (!m.date || !m.time) return toast.error("Enter the question date and time");
-    const chart = { id: `h${Date.now().toString(36)}`, kind: "horary", number, question: question.trim(), name: `Horary #${number}${question.trim() ? ` · ${question.trim().slice(0, 40)}` : ""}`,
+    const chart = { id: `h${Date.now().toString(36)}`, kind: "horary", number, topic, question: question.trim(), name: `Horary #${number}${question.trim() ? ` · ${question.trim().slice(0, 40)}` : ""}`,
       date: m.date, time: m.time, place: city.name, latitude: city.lat, longitude: city.lon, tz: city.tz };
     setBusy(true);
     try {
@@ -119,6 +121,12 @@ export default function HoraryPage() {
               </div>
             </div>
             <Preview row={row} />
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-medium text-slate-300">Question topic</span>
+              <select value={topic} onChange={(e) => setTopic(e.target.value)} className={inputCls} data-testid="horary-topic-input">
+                {TOPICS.map((x) => <option key={x.id} value={x.id}>{x.label} · house {x.house}</option>)}
+              </select>
+            </label>
             <label className="block">
               <span className="mb-1.5 block text-xs font-medium text-slate-300">Question (optional)</span>
               <textarea value={question} onChange={(e) => setQuestion(e.target.value)} maxLength={200} rows={2} placeholder="e.g. Will I get the job I interviewed for?" className={inputCls} data-testid="horary-question-input" />

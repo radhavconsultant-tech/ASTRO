@@ -17,7 +17,7 @@ export const MODULES = [
     summary: "KP horary charts from a number between 1 and 249.",
     planned: ["Number entry with the matching Ascendant sub-division", "Horary chart in the same explorer", "Question-specific cusp analysis driven by approved rules"],
     depends: ["Horary number table (Phase 3)", "Your rule engine (Phase 3)"] },
-  { id: "career", key: "career", group: "lifeTopics", icon: Briefcase, phase: 3,
+  { id: "career", key: "career", group: "lifeTopics", icon: Briefcase, phase: 3, to: "/career", built: true,
     summary: "Career topic reports built from 2, 6, 10 and 11 cusp sub-lord analysis.",
     planned: ["Cusp sub-lord chain for the relevant houses", "Timing from Dasha periods", "Source citation for every rule used"],
     depends: ["Your rule & knowledge engine (Phase 3)"] },

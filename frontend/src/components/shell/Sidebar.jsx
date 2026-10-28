@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Orbit, Aperture, PlusCircle, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { LayoutDashboard, Orbit, Aperture, PlusCircle, ChevronsLeft, ChevronsRight, GitCompareArrows, CalendarDays } from "lucide-react";
 import { Logo } from "./Logo";
 import { useApp } from "@/context/AppContext";
 import { MODULES, MODULE_GROUPS } from "@/lib/modules";
@@ -9,6 +9,8 @@ const CORE = [
   { to: "/observatory", tk: "observatory", icon: Orbit, id: "observatory" },
   { to: "/explorer", tk: "explorer", icon: Aperture, id: "explorer" },
   { to: "/charts/new", tk: "newChart", icon: PlusCircle, id: "new-chart" },
+  { to: "/compare", tk: "compare", icon: GitCompareArrows, id: "compare" },
+  { to: "/transits", tk: "transitCalendar", icon: CalendarDays, id: "transits" },
 ];
 
 const Item = ({ to, icon: Icon, label, id, collapsed, pending, onNavigate }) => (
