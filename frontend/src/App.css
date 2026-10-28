@@ -1,0 +1,15 @@
+.wheel-planet {
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+.wheel-planet:hover {
+  cursor: pointer;
+}
+.house-sector {
+  transition: fill 200ms ease;
+  cursor: pointer;
+}
+.planet-label-3d {
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate3d(14px, -50%, 0);
+}

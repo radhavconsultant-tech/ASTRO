@@ -1,0 +1,88 @@
+{
+  "project_title": "KP Insight — Cinematic 3D KP Astrology Platform",
+  "theme": "Dark Deep-Space Celestial (Default) with Light Parchment Option",
+  "typography": {
+    "heading_font": "Playfair Display, Cormorant Garamond, serif",
+    "body_font": "Inter, system-ui, sans-serif",
+    "data_font": "JetBrains Mono, Source Code Pro, monospace",
+    "scales": {
+      "hero_title": "text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-amber-100",
+      "section_title": "text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-normal text-amber-200",
+      "card_title": "text-lg sm:text-xl font-medium text-slate-100",
+      "eyebrow_label": "text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80",
+      "data_cell": "font-mono text-sm tracking-tight text-cyan-300",
+      "body_text": "text-sm sm:text-base text-slate-300 leading-relaxed"
+    }
+  },
+  "colors": {
+    "archetype": "LUXURY & PERFORMANCE PRO (Deep Celestial Obsidian + Champagne Gold + Cool Cyan)",
+    "palette": {
+      "background": "#0B0F19 (Deep Obsidian Space)",
+      "surface_dark": "#111827 (Midnight Slate)",
+      "surface_elevated": "#1E293B (Astronomical Navy)",
+      "gold_primary": "#D4AF37 (Champagne Gold)",
+      "gold_glow": "#E6C668 (Starlight Gold)",
+      "cyan_accent": "#22D3EE (Cool Data Cyan)",
+      "cyan_soft": "#0891B2 (Deep Cyan Border)",
+      "text_primary": "#F8FAFC (Pure Starlight)",
+      "text_secondary": "#94A3B8 (Celestial Mist)",
+      "border_subtle": "rgba(212, 175, 55, 0.15) (Subtle Gold Foil Edge)"
+    },
+    "gradients": {
+      "celestial_hero": "bg-gradient-to-b from-[#0B0F19] via-[#111827] to-[#0F172A]",
+      "gold_text": "bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-100 bg-clip-text text-transparent",
+      "cyan_glow": "bg-gradient-to-r from-cyan-500/20 via-sky-500/10 to-transparent",
+      "card_gold_border": "border border-amber-500/20 hover:border-amber-400/50"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "backdrop-blur-xl bg-slate-900/80 border border-amber-500/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+    "orbit_rings": "fine 1px dashed or solid gold/cyan SVG borders representing celestial orbits",
+    "glow_effects": "drop-shadow-[0_0_12px_rgba(212,175,55,0.3)] for key planets and ASC node",
+    "textures": "Subtle starfield noise background overlay with CSS radial gradient lights"
+  },
+  "layout_and_grids": {
+    "app_shell": "Collapsible sidebar left nav (width 64 to 260px) + Top navigation header with status indicators & quick search + Main scrollable stage container",
+    "grid_modes": {
+      "observatory_split": "grid grid-cols-1 lg:grid-cols-12 gap-6 (Left 7 cols: 3D/2D Sky View & Time Panel, Right 5 cols: Chart Summary & Planet Quick Inspector)",
+      "chart_explorer": "grid grid-cols-1 lg:grid-cols-12 gap-6 (Left 5 cols: Interactive SVG Wheel, Right 7 cols: Tabbed Planet/Cusp Tables & 4-Level Significator Matrix)",
+      "form_view": "max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4"
+    }
+  },
+  "motion": {
+    "framer_motion": "Smooth entrance staggers, cinematic camera transitions, tab transitions",
+    "camera_intro": "Line-by-line title reveal, solar system zoom-in on launch",
+    "micro_interactions": "Hover glow on chart wheel cusps, planet table row focus, pulse glow on active time playback step"
+  },
+  "3d_libraries": {
+    "primary": "Three.js canvas with interactive 3D planetary orbits (Heliocentric & Geocentric views)",
+    "fallback": "Interactive SVG / Canvas astronomical sphere rendering with planet position markers, orbit rings, and node markers"
+  },
+  "image_urls": {
+    "background_space": "https://images.unsplash.com/photo-1505506874110-6a7a69069a08?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "observatory_hero": "https://images.unsplash.com/photo-1505579962197-df174377e13f?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "galaxy_nebula": "https://images.unsplash.com/photo-1537147347432-676815edd56c?crop=entropy&cs=srgb&fm=jpg&q=85"
+  },
+  "component_guidelines": {
+    "file_extension": "Use .js or .jsx files only for React components",
+    "testing_attribute": "CRITICAL: Every interactive button, input, tab, select, table row, and navigational link MUST include data-testid attribute in kebab-case format.",
+    "buttons": "Pill or fine-cornered buttons with champagne gold or cyan borders, subtle hover glows, and crisp contrast",
+    "tables": "Dense, crisp data grid with sortable headers, search filter, copy button, and row highlight sync with chart wheel",
+    "chart_wheel": "Custom SVG wheel rendering 12 Placidus cusps, 12 Zodiac signs, 27 Nakshatras, and planet icons with hover tooltips for Star-Lord, Sub-Lord, and Sub-Sub-Lord",
+    "significator_matrix": "Interactive 4-level significator grid with Cusp-based vs Whole-sign toggle",
+    "language_toggle": "English / Telugu (EN / TE) toggle button in top bar",
+    "calculation_badge": "Status indicator with states: Ephemeris (built-in), Demo fixture, Pending module"
+  },
+  "instructions_to_main_agent": [
+    "Build a complete, cinematic, fully functional Milestone 1 web application for KP Insight.",
+    "Implement the live 3D / 2D Planetary Observatory with interactive orbit controls, play/pause, step hour/day/month, and view toggle (Heliocentric vs Geocentric KP Sky Zodiac Ring).",
+    "Build the KP Chart Explorer with custom interactive SVG chart wheel (12 cusps, signs, 27 nakshatras, planet markers, hover tooltips with Star-Lord and Sub-Lord details).",
+    "Include full Planetary Table & Cusp Table with search, sorting, copy to clipboard, and detail side panel.",
+    "Include 4-level Significator View with Cusp-based vs Whole-sign toggle.",
+    "Provide Birth Chart Form with city search, date/time pickers, and pre-filled sample profiles (e.g. Krishnamurti Natal Chart, Famous Persona, Custom).",
+    "Implement the App Shell with collapsible left sidebar for all planned modules (Dasha, Sade Sati, Horary, Career, Marriage, Finance, Gemstones, Rudraksha, Remedies, Wellbeing, Knowledge Library, Reports).",
+    "Module pages under development must show beautiful 'In Development' interactive preview screens with roadmap timelines and feature highlights.",
+    "Ensure global chart selector, quick search dialog, English/Telugu language switcher, and calculation status indicator are functional in top bar.",
+    "Ensure all interactive elements have data-testid attributes for testing."
+  ]
+}

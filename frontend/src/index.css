@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 224 39% 7%;
+        --foreground: 210 40% 98%;
+        --card: 221 39% 11%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222 40% 10%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 46 65% 52%;
+        --primary-foreground: 224 39% 7%;
+        --secondary: 217 33% 17%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217 33% 15%;
+        --muted-foreground: 215 20% 70%;
+        --accent: 217 33% 18%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 50%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 217 25% 20%;
+        --input: 217 25% 22%;
+        --ring: 46 65% 52%;
+        --radius: 0.6rem;
+        --gold: #d4af37;
+        --gold-soft: #e6c668;
+        --cyan: #22d3ee;
+        --space: #0b0f19;
+        --slate: #111827;
+        --navy: #1e293b;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        @apply bg-background text-foreground;
+        margin: 0;
+        font-family: "Manrope", "Noto Sans Telugu", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        background-color: var(--space);
+    }
+    ::selection {
+        background: rgba(212, 175, 55, 0.35);
+        color: #fff;
+    }
+}
+
+@layer components {
+    .font-display {
+        font-family: "Cormorant Garamond", "Noto Sans Telugu", serif;
+    }
+    .font-data {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-feature-settings: "tnum" 1;
+    }
+    .eyebrow {
+        @apply text-xs font-semibold uppercase tracking-[0.22em] text-amber-300/90;
+    }
+    .glass {
+        @apply border border-amber-500/15 bg-slate-900/75 backdrop-blur-xl;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    .panel {
+        @apply rounded-xl border border-white/[0.07] bg-[#0f1524];
+    }
+    .gold-text {
+        @apply bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-100 bg-clip-text text-transparent;
+    }
+    .star-noise {
+        background-image:
+            radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.5), transparent 60%),
+            radial-gradient(1px 1px at 72% 12%, rgba(255, 255, 255, 0.35), transparent 60%),
+            radial-gradient(1px 1px at 42% 82%, rgba(255, 255, 255, 0.3), transparent 60%),
+            radial-gradient(1.5px 1.5px at 88% 62%, rgba(230, 198, 104, 0.5), transparent 60%),
+            radial-gradient(1px 1px at 22% 66%, rgba(255, 255, 255, 0.3), transparent 60%),
+            radial-gradient(900px 500px at 85% -10%, rgba(34, 211, 238, 0.06), transparent 70%),
+            radial-gradient(800px 600px at -10% 110%, rgba(212, 175, 55, 0.06), transparent 70%);
+    }
+    .scroll-thin::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    .scroll-thin::-webkit-scrollbar-thumb {
+        background: rgba(212, 175, 55, 0.25);
+        border-radius: 6px;
+    }
+    .focus-ring {
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0f19];
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+[data-debug-wrapper="true"] {
+    display: contents !important;
+}
