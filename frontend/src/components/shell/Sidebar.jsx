@@ -35,8 +35,8 @@ export const SidebarNav = ({ collapsed, onNavigate }) => {
           {!collapsed && <div className="px-3 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">{t(g)}</div>}
           {collapsed && <div className="mx-3 border-t border-white/5" />}
           {MODULES.filter((m) => m.group === g).map((m) => (
-            <Item key={m.id} to={`/modules/${m.id}`} icon={m.icon} id={`module-${m.id}`} label={t(m.key)}
-              collapsed={collapsed} pending onNavigate={onNavigate} />
+            <Item key={m.id} to={m.to || `/modules/${m.id}`} icon={m.icon} id={`module-${m.id}`} label={t(m.key)}
+              collapsed={collapsed} pending={!m.built} onNavigate={onNavigate} />
           ))}
         </div>
       ))}

@@ -1,7 +1,7 @@
 import { Clock3, Orbit, Compass, HelpCircle, Briefcase, HeartHandshake, Coins, Gem, CircleDot, Sparkles, HeartPulse, BookOpen, FileText } from "lucide-react";
 
 export const MODULES = [
-  { id: "dasha", key: "dasha", group: "timing", icon: Clock3, phase: 2,
+  { id: "dasha", key: "dasha", group: "timing", icon: Clock3, phase: 2, to: "/dasha", built: true,
     summary: "A Vimshottari timeline anchored to the Moon's exact longitude.",
     planned: ["Mahadasha, Bhukti and Antara periods calculated from the natal Moon", "Sookshma and Prana levels clearly marked as unavailable", "Current period highlighted with start and end dates", "Click a period to see its lords' significations"],
     depends: ["Natal Moon longitude (available now)", "Dasha calculation module (Phase 2)"] },

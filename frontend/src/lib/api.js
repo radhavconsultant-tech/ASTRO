@@ -8,11 +8,20 @@ const need = () => {
   return client;
 };
 
-export const fetchChart = async (c) => {
+const chartBody = (c) => {
   const body = { name: c.name, date: c.date, time: c.time, latitude: Number(c.latitude), longitude: Number(c.longitude) };
   if (c.tz) body.tz = c.tz;
   else body.utc_offset = Number(c.utc_offset);
-  const { data } = await need().post("/chart", body);
+  return body;
+};
+
+export const fetchChart = async (c) => {
+  const { data } = await need().post("/chart", chartBody(c));
+  return data;
+};
+
+export const fetchDasha = async (c) => {
+  const { data } = await need().post("/dasha", chartBody(c));
   return data;
 };
 

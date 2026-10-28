@@ -11,6 +11,7 @@ import ObservatoryPage from "@/pages/ObservatoryPage";
 import ExplorerPage from "@/pages/ExplorerPage";
 import NewChartPage from "@/pages/NewChartPage";
 import ModulePage from "@/pages/ModulePage";
+import DashaPage from "@/pages/DashaPage";
 
 function Shell() {
   const [collapsed, setCollapsed] = useState(false);
@@ -25,6 +26,8 @@ function Shell() {
             <Route path="/observatory" element={<ObservatoryPage />} />
             <Route path="/explorer" element={<ExplorerPage />} />
             <Route path="/charts/new" element={<NewChartPage />} />
+            <Route path="/dasha" element={<DashaPage />} />
+            <Route path="/modules/dasha" element={<Navigate to="/dasha" replace />} />
             <Route path="/modules/:id" element={<ModulePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

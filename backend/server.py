@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 from kp_engine import build_chart, sky_positions, SOURCE, CONTRACT_VERSION
 from cities import search_cities
+from dasha import build_dasha
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -64,6 +65,12 @@ async def chart(req: ChartRequest):
     data = build_chart(dt, req.latitude, req.longitude)
     data["input"] = req.model_dump()
     return data
+
+
+@api_router.post("/dasha")
+async def dasha(req: ChartRequest):
+    dt = _local_to_utc(req.date, req.time, req.tz, req.utc_offset)
+    return build_dasha(dt)
 
 
 @api_router.get("/sky")

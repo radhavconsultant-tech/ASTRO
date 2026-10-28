@@ -45,10 +45,10 @@ export const QuickSearch = () => {
                 data-testid={`qs-chart-${c.id}`}>{c.name} <span className="ml-2 text-xs text-slate-500">{c.place}</span></CommandItem>
             ))}
           </CommandGroup>
-          <CommandGroup heading="Planned modules">
+          <CommandGroup heading="Modules">
             {MODULES.map((m) => (
-              <CommandItem key={m.id} onSelect={() => go(() => nav(`/modules/${m.id}`))} data-testid={`qs-module-${m.id}`}>
-                {t(m.key)} <span className="ml-auto text-[10px] uppercase text-slate-500">Phase {m.phase}</span>
+              <CommandItem key={m.id} onSelect={() => go(() => nav(m.to || `/modules/${m.id}`))} data-testid={`qs-module-${m.id}`}>
+                {t(m.key)} <span className="ml-auto text-[10px] uppercase text-slate-500">{m.built ? "Live" : `Phase ${m.phase}`}</span>
               </CommandItem>
             ))}
           </CommandGroup>

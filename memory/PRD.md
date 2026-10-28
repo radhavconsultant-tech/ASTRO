@@ -16,11 +16,12 @@ App shell (collapsible nav, chart selector, quick search ⌘K, EN/Telugu labels,
 
 ## Implemented (2026-10-28)
 - All Phase 1 items above. No login, no AI, no predictions.
+- Vimshottari Dasha page (/dasha): POST /api/dasha (kp-dasha/1.0, year = 365.25 days) — Mahadasha/Bhukti/Antara, balance at birth, current periods for a reference date, 120-year timeline, expandable Bhukti→Antara list with cusp-based house significations; Sookshma/Prana marked unavailable.
 
 ## Backlog
-- P1 (Phase 2): Vimshottari Dasha timeline (MD/AD/PD; Sookshma/Prana marked unavailable), Sade Sati explorer, ruling planets.
+- P1 (Phase 2): Sade Sati explorer, ruling planets.
 - P2 (Phase 3): connect user engine/rules/knowledge, Telugu passages, topic reports, remedies via approved rules, wellbeing guardrails, report export/history, optional AI explanations.
 - Nice-to-have: node agency rules for Rahu/Ketu significators, more cities / geocoding.
 
 ## Next tasks
-Dasha timeline; Sade Sati path on KP sky ring; report export.
+Sade Sati path on KP sky ring; ruling planets; report export.

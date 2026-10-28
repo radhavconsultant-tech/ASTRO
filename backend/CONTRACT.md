@@ -19,6 +19,9 @@ Response:
 
 Point = `{ longitude (sidereal 0–360), sign, sign_index, sign_lord, degree_in_sign, dms, nakshatra, nakshatra_index, pada, star_lord, sub_lord, sub_sub_lord }`
 
+## POST /api/dasha  → `kp-dasha/1.0`
+Same request as /api/chart. Response: `{ system, year_days, birth_utc, moon: Point, nakshatra, balance: {lord, years}, mahadashas: [{lord, start, end, years, bhuktis: [{lord, start, end, years, antaras: [{lord, start, end, years}]}]}], levels: {available, unavailable}, calc_ms }` (dates are UTC ISO).
+
 ## GET /api/sky?utc=ISO  → `kp-sky/1.0`
 - `heliocentric`: `{ Mercury..Neptune, Earth: {longitude (tropical), latitude, distance_au}, Moon: {geocentric: true, ...} }`
 - `geocentric_sidereal`: `{ Name: Point + {retrograde, speed} }` incl. Rahu, Ketu, Uranus, Neptune

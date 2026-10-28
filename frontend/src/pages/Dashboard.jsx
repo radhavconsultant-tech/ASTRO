@@ -91,9 +91,10 @@ const Roadmap = () => {
             <div className="font-data text-xs text-cyan-300">PHASE {ph}</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {MODULES.filter((m) => m.phase === ph).map((m) => (
-                <Link key={m.id} to={`/modules/${m.id}`} data-testid={`roadmap-${m.id}`}
+                <Link key={m.id} to={m.to || `/modules/${m.id}`} data-testid={`roadmap-${m.id}`}
                   className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-sm text-slate-200 transition-colors hover:border-amber-400/50 hover:text-amber-100">
                   <m.icon className="h-3.5 w-3.5 text-amber-300/80" strokeWidth={1.6} />{t(m.key)}
+                  {m.built && <span className="rounded bg-emerald-400/15 px-1.5 text-[10px] font-semibold uppercase text-emerald-200">Live</span>}
                 </Link>
               ))}
             </div>
