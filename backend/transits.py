@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 import swisseph as swe
-from kp_engine import SID, SIGNS, SOURCE, SIGN_LORDS, to_jd, kp_point
+from kp_engine import SID, SIGNS, SOURCE, SIGN_LORDS, to_jd, kp_point, node_agents
 
 PHASES = {-1: ("rising", "Rising · 12th from Moon"), 0: ("peak", "Peak · over the Moon"), 1: ("setting", "Setting · 2nd from Moon")}
 DAY_LORDS = ["Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Sun"]  # Python weekday() Monday=0
@@ -97,6 +97,52 @@ def build_sade_sati(birth_utc: datetime, years: int = 100) -> dict:
     }
 
 
+def _psign(jd, pid):
+    return int((swe.calc_ut(jd, pid, SID)[0][0] % 360) // 30)
+
+
+def upcoming_ingresses(start_utc: datetime, natal: dict, years: float = 3) -> dict:
+    t0 = time.perf_counter()
+    jd0 = to_jd(start_utc)
+    msign = next(p["sign_index"] for p in natal["planets"] if p["name"] == "Moon")
+    asign = natal["cusps"][0]["sign_index"]
+    sade = {(msign - 1) % 12: "rising", msign: "peak", (msign + 1) % 12: "setting"}
+    events = []
+    for name, pid in (("Saturn", swe.SATURN), ("Jupiter", swe.JUPITER)):
+        jd, cur = jd0, _psign(jd0, pid)
+        while jd < jd0 + years * 365.25:
+            nxt = jd + 2
+            s = _psign(nxt, pid)
+            if s != cur:
+                a, b = jd, nxt
+                for _ in range(30):
+                    m = (a + b) / 2
+                    a, b = (m, b) if _psign(m, pid) == cur else (a, m)
+                retro = swe.calc_ut(b, pid, SID)[0][3] < 0
+                ev = {"planet": name, "from_sign": SIGNS[cur], "to_sign": SIGNS[s], "utc": _jd_to_dt(b).isoformat(),
+                      "retrograde": retro, "house_from_moon": (s - msign) % 12 + 1, "house_from_asc": (s - asign) % 12 + 1}
+                if name == "Saturn":
+                    if s in sade and cur not in sade:
+                        ev["sade_sati"] = "begins"
+                    elif cur in sade and s not in sade:
+                        ev["sade_sati"] = "ends"
+                    elif s in sade:
+                        ev["sade_sati"] = sade[s]
+                events.append(ev)
+                cur = s
+            jd = nxt
+    events.sort(key=lambda e: e["utc"])
+    now = {}
+    for name, pid in (("Saturn", swe.SATURN), ("Jupiter", swe.JUPITER)):
+        xx = swe.calc_ut(jd0, pid, SID)[0]
+        p = kp_point(xx[0])
+        now[name] = {"sign": p["sign"], "dms": p["dms"], "retrograde": xx[3] < 0,
+                     "house_from_moon": (p["sign_index"] - msign) % 12 + 1, "house_from_asc": (p["sign_index"] - asign) % 12 + 1}
+    return {"contract": "kp-transits/1.0", "source": SOURCE, "from_utc": start_utc.isoformat(), "years": years,
+            "natal_moon_sign": SIGNS[msign], "natal_asc_sign": SIGNS[asign], "current": now, "events": events,
+            "calc_ms": round((time.perf_counter() - t0) * 1000, 1)}
+
+
 def build_ruling(dt_utc: datetime, lat: float, lon: float, tz: str) -> dict:
     t0 = time.perf_counter()
     jd = to_jd(dt_utc)
@@ -131,11 +177,28 @@ def build_ruling(dt_utc: datetime, lat: float, lon: float, tz: str) -> dict:
     for r in rows:
         if r["planet"] not in unique:
             unique.append(r["planet"])
+    by = {}
+    for name, pid in [("Sun", swe.SUN), ("Moon", swe.MOON), ("Mars", swe.MARS), ("Mercury", swe.MERCURY),
+                      ("Jupiter", swe.JUPITER), ("Venus", swe.VENUS), ("Saturn", swe.SATURN), ("Rahu", swe.MEAN_NODE)]:
+        by[name] = kp_point(swe.calc_ut(jd, pid, SID)[0][0])
+    by["Ketu"] = kp_point(by["Rahu"]["longitude"] + 180)
+    node_rp = []
+    for node in ("Rahu", "Ketu"):
+        ag = node_agents(by, node, [p for p in unique if p not in ("Rahu", "Ketu")])
+        reasons = []
+        if ag["sign_lord"] in unique:
+            reasons.append(f"in the sign of {ag['sign_lord']}")
+        if ag["star_lord"] in unique:
+            reasons.append(f"in the star of {ag['star_lord']}")
+        reasons += [f"conjoined with {p}" for p in ag["conjoined"]]
+        reasons += [f"aspected by {p}" for p in ag["aspected_by"]]
+        if reasons:
+            node_rp.append({"node": node, "sign": by[node]["sign"], "reasons": reasons})
     return {
         "contract": "kp-ruling/1.0", "source": SOURCE, "utc": dt_utc.isoformat(), "local": local.isoformat(),
         "tz": tz, "latitude": lat, "longitude": lon, "weekday": vedic_day.strftime("%A"),
         "sunrise_local": sunrise_local, "before_sunrise": before, "ascendant": asc, "moon": moon,
-        "ruling": rows, "unique": unique,
-        "notes": ["Day lord changes at local sunrise.", "Rahu/Ketu agency (node as ruling planet) is not applied in this milestone."],
+        "ruling": rows, "unique": unique, "node_agents": node_rp,
+        "notes": ["Day lord changes at local sunrise.", "Rahu/Ketu are added when in the sign or star of a ruling planet, conjoined within 3°20′, or aspected by one."],
         "calc_ms": round((time.perf_counter() - t0) * 1000, 2),
     }

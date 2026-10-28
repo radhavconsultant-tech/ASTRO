@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchChart } from "@/lib/api";
+import { fetchChart, fetchHorary } from "@/lib/api";
 import { translate } from "@/lib/i18n";
 import { SAMPLE_CHART } from "@/lib/kp";
 import sampleFixture from "@/data/sampleChart.json";
@@ -34,8 +34,8 @@ export function AppProvider({ children }) {
   const active = charts.find((c) => c.id === activeId) || SAMPLE_CHART;
 
   const query = useQuery({
-    queryKey: ["chart", active.id, active.date, active.time, active.latitude, active.longitude, active.tz, active.utc_offset],
-    queryFn: () => fetchChart(active),
+    queryKey: ["chart", active.id, active.kind, active.number, active.date, active.time, active.latitude, active.longitude, active.tz, active.utc_offset],
+    queryFn: () => (active.kind === "horary" ? fetchHorary(active) : fetchChart(active)),
     retry: 1,
     staleTime: Infinity,
   });

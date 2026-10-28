@@ -31,7 +31,7 @@ HELIO = [("Mercury", swe.MERCURY), ("Venus", swe.VENUS), ("Mars", swe.MARS), ("J
 
 
 def to_jd(dt_utc: datetime) -> float:
-    h = dt_utc.hour + dt_utc.minute / 60 + dt_utc.second / 3600
+    h = dt_utc.hour + dt_utc.minute / 60 + (dt_utc.second + dt_utc.microsecond / 1e6) / 3600
     return swe.julday(dt_utc.year, dt_utc.month, dt_utc.day, h)
 
 
@@ -97,13 +97,53 @@ def _significators(planets, occ_key, owned):
             "B": occupants,
             "C": [n for n in names if by[n]["star_lord"] in owners],
             "D": owners}
+    _node_agency(by, names, planet_view, house_view)
     return {"planets": planet_view, "houses": house_view}
 
 
-def build_chart(dt_utc: datetime, lat: float, lon: float) -> dict:
+CONJ_ORB = 40.0 / 12.0  # 3°20′
+ASPECTS = {"Mars": (6, 3, 7), "Jupiter": (6, 4, 8), "Saturn": (6, 2, 9)}
+
+
+def aspects_sign(planet: str, from_sign: int, to_sign: int) -> bool:
+    return (to_sign - from_sign) % 12 in ASPECTS.get(planet, (6,))
+
+
+def node_agents(by: dict, node: str, pool) -> dict:
+    n = by[node]
+    conj = [p for p in pool if p not in ("Rahu", "Ketu") and abs(((by[p]["longitude"] - n["longitude"]) + 540) % 360 - 180) <= CONJ_ORB]
+    asp = [p for p in pool if p not in ("Rahu", "Ketu") and p not in conj
+           and aspects_sign(p, by[p]["sign_index"], n["sign_index"])]
+    return {"sign_lord": n["sign_lord"], "star_lord": n["star_lord"], "conjoined": conj, "aspected_by": asp}
+
+
+def _node_agency(by, names, planet_view, house_view):
+    for node in ("Rahu", "Ketu"):
+        if node not in planet_view:
+            continue
+        ag = node_agents(by, node, names)
+        agents = [ag["sign_lord"]] + ag["conjoined"] + ag["aspected_by"]
+        houses = set()
+        detail = []
+        for a in dict.fromkeys(agents):
+            pv = planet_view[a]
+            hs = sorted(set(pv["L1"] + pv["L2"] + pv["L3"] + pv["L4"]))
+            role = "sign lord" if a == ag["sign_lord"] else "conjoined" if a in ag["conjoined"] else "aspects"
+            detail.append({"planet": a, "role": role, "houses": hs})
+            houses.update(hs)
+        planet_view[node]["agency"] = {"agents": detail, "houses": sorted(houses)}
+        for h in house_view.values():
+            h.setdefault("agency", {"A": [], "B": [], "C": [], "D": []})
+            for k in ("A", "B", "C", "D"):
+                if node not in h[k] and any(a in h[k] for a in agents):
+                    h["agency"][k].append(node)
+
+
+def build_chart(dt_utc: datetime, lat: float, lon: float, cusp_dt: datetime = None) -> dict:
     t0 = time.perf_counter()
     jd = to_jd(dt_utc)
-    cusps, ascmc = swe.houses_ex(jd, lat, lon, b"P", swe.FLG_SIDEREAL)
+    jd_c = to_jd(cusp_dt) if cusp_dt else jd
+    cusps, ascmc = swe.houses_ex(jd_c, lat, lon, b"P", swe.FLG_SIDEREAL)
     cusps = list(cusps)[:12]
     planets = []
     for name, pid in KP_PLANETS + OUTER:
@@ -136,7 +176,7 @@ def build_chart(dt_utc: datetime, lat: float, lon: float) -> dict:
         "significators": {
             "cusp_based": _significators(planets, "house", owned_cusp),
             "whole_sign": _significators(planets, "whole_sign_house", owned_ws)},
-        "notes": ["Rahu/Ketu ownership and node-agency rules are not applied in this milestone (pending engine)."],
+        "notes": ["Node agency applied: Rahu/Ketu act for their sign lord, planets conjoined within 3°20′, and planets aspecting their sign (7th; Mars 4/8, Jupiter 5/9, Saturn 3/10). Nodes own no houses."],
     }
 
 

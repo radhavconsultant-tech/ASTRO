@@ -31,7 +31,7 @@ const Chips = ({ list, empty = "—" }) => (
   <span className="font-data text-cyan-200">{list?.length ? list.join(", ") : empty}</span>
 );
 
-export const DetailPanel = ({ data, selection, method }) => {
+export const DetailPanel = ({ data, selection, method, agency = true }) => {
   const { t } = useApp();
   if (!selection) {
     return (
@@ -73,6 +73,19 @@ export const DetailPanel = ({ data, selection, method }) => {
                 <div key={k}><div className="font-data text-amber-300">{k}</div><Chips list={s[k]} /></div>
               ))}
             </div>
+            {agency && s.agency && (
+              <div className="mt-3 border-t border-white/[0.06] pt-3 text-xs" data-testid="detail-node-agency">
+                <div className="text-[11px] uppercase tracking-wider text-cyan-300/90">Node agency · houses <Chips list={s.agency.houses} /></div>
+                <ul className="mt-2 space-y-1">
+                  {s.agency.agents.map((a) => (
+                    <li key={a.planet} className="flex justify-between gap-2">
+                      <span><span style={{ color: PLANET_COLOR[a.planet] }}>{t(a.planet)}</span> <span className="text-slate-500">· {a.role}</span></span>
+                      <Chips list={a.houses} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -100,7 +113,7 @@ export const DetailPanel = ({ data, selection, method }) => {
           <div className="text-[11px] uppercase tracking-wider text-slate-400">Significators · {methodLabel}</div>
           <div className="mt-2 grid grid-cols-4 gap-2 text-center text-xs">
             {["A", "B", "C", "D"].map((k) => (
-              <div key={k}><div className="font-data text-amber-300">{k}</div><Chips list={h[k].map((p) => ABBR[p])} /></div>
+              <div key={k}><div className="font-data text-amber-300">{k}</div><Chips list={[...h[k], ...(agency ? h.agency?.[k] || [] : []).map((p) => `${p}*`)].map((p) => (p.endsWith("*") ? `${ABBR[p.slice(0, -1)]}*` : ABBR[p]))} /></div>
             ))}
           </div>
         </div>

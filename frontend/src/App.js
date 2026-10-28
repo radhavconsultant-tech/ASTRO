@@ -15,6 +15,8 @@ import DashaPage from "@/pages/DashaPage";
 import SadeSatiPage from "@/pages/SadeSatiPage";
 import RulingPage from "@/pages/RulingPage";
 import DashaPrint from "@/pages/DashaPrint";
+import ReportPrint from "@/pages/ReportPrint";
+import HoraryPage from "@/pages/HoraryPage";
 
 function Shell() {
   const [collapsed, setCollapsed] = useState(false);
@@ -34,6 +36,8 @@ function Shell() {
             <Route path="/sade-sati" element={<SadeSatiPage />} />
             <Route path="/modules/sade-sati" element={<Navigate to="/sade-sati" replace />} />
             <Route path="/ruling" element={<RulingPage />} />
+            <Route path="/horary" element={<HoraryPage />} />
+            <Route path="/modules/horary" element={<Navigate to="/horary" replace />} />
             <Route path="/modules/ruling-planets" element={<Navigate to="/ruling" replace />} />
             <Route path="/modules/:id" element={<ModulePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
@@ -51,6 +55,7 @@ export default function App() {
         <TooltipProvider delayDuration={200}>
           <Routes>
             <Route path="/print/dasha" element={<DashaPrint />} />
+            <Route path="/print/report" element={<ReportPrint />} />
             <Route path="*" element={<Shell />} />
           </Routes>
           <Toaster theme="dark" position="bottom-right" />

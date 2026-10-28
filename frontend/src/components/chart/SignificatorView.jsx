@@ -1,3 +1,4 @@
+import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/context/AppContext";
 import { ABBR, PLANET_COLOR, KP_PLANETS } from "@/lib/kp";
 
@@ -18,11 +19,18 @@ export const MethodToggle = ({ method, setMethod }) => {
 const Houses = ({ list }) => (
   <span className="font-data text-cyan-200">{list?.length ? list.join(", ") : <span className="text-slate-600">—</span>}</span>
 );
-const Planets = ({ list, onPick }) => (
+const Planets = ({ list, extra, onPick }) => (
   <span className="flex flex-wrap gap-1">
-    {list?.length ? list.map((p) => (
-      <button key={p} onClick={() => onPick(p)} className="focus-ring font-data rounded border border-white/10 px-1.5 text-[12px] hover:border-amber-300/50" style={{ color: PLANET_COLOR[p] }}>{ABBR[p]}</button>
-    )) : <span className="text-slate-600">—</span>}
+    {list?.length || extra?.length ? (
+      <>
+        {(list || []).map((p) => (
+          <button key={p} onClick={() => onPick(p)} className="focus-ring font-data rounded border border-white/10 px-1.5 text-[12px] hover:border-amber-300/50" style={{ color: PLANET_COLOR[p] }}>{ABBR[p]}</button>
+        ))}
+        {(extra || []).map((p) => (
+          <button key={`x${p}`} onClick={() => onPick(p)} title="Node agency" className="focus-ring font-data rounded border border-dashed border-cyan-400/50 px-1.5 text-[12px]" style={{ color: PLANET_COLOR[p] }}>{ABBR[p]}*</button>
+        ))}
+      </>
+    ) : <span className="text-slate-600">—</span>}
   </span>
 );
 
@@ -32,7 +40,7 @@ const LEVELS = [
 ];
 const HLEVELS = [["A", "Planets in the star of occupants"], ["B", "Occupants"], ["C", "Planets in the star of the owner"], ["D", "Owner"]];
 
-export const SignificatorView = ({ data, method, setMethod, mode, setMode, selection, onSelect }) => {
+export const SignificatorView = ({ data, method, setMethod, mode, setMode, selection, onSelect, agency, setAgency }) => {
   const { t } = useApp();
   const sig = data.significators[method];
   const selP = selection?.type === "planet" ? selection.id : null;
@@ -47,6 +55,9 @@ export const SignificatorView = ({ data, method, setMethod, mode, setMode, selec
               className={`focus-ring rounded-full px-3 py-1.5 transition-colors ${mode === k ? "bg-cyan-400/15 text-cyan-200" : "text-slate-400 hover:text-white"}`}>{t(l)}</button>
           ))}
         </div>
+        <label className="flex items-center gap-2 text-xs text-slate-300">
+          <Switch checked={agency} onCheckedChange={setAgency} data-testid="sig-agency-toggle" />Node agency
+        </label>
         <span className="text-xs text-slate-500" data-testid="sig-method-note">
           {method === "cusp_based" ? "Placidus cusps · occupation by cusp span · ownership by cusp sign-lord" : "Houses counted by whole signs from the Ascendant sign"}
         </span>
@@ -56,7 +67,8 @@ export const SignificatorView = ({ data, method, setMethod, mode, setMode, selec
           <table className="w-full min-w-[640px] text-left text-sm" data-testid="sig-planet-table">
             <thead className="bg-[#111827] text-[11px] uppercase tracking-wider text-slate-400">
               <tr><th className="px-3 py-2.5">{t("planet")}</th><th className="px-3">{t("starLord")}</th>
-                {LEVELS.map(([k, d]) => <th key={k} className="px-3" title={d}>{k}</th>)}</tr>
+                {LEVELS.map(([k, d]) => <th key={k} className="px-3" title={d}>{k}</th>)}
+                {agency && <th className="px-3" title="Houses signified through node agency">Agency</th>}</tr>
             </thead>
             <tbody>
               {KP_PLANETS.map((n) => {
@@ -68,6 +80,16 @@ export const SignificatorView = ({ data, method, setMethod, mode, setMode, selec
                     <td className="px-3 text-slate-300">{t(r.star_lord)}</td>
                     <td className="px-3"><Houses list={r.L1} /></td><td className="px-3"><Houses list={r.L2} /></td>
                     <td className="px-3"><Houses list={r.L3} /></td><td className="px-3"><Houses list={r.L4} /></td>
+                    {agency && (
+                      <td className="px-3" data-testid={`sig-agency-${n.toLowerCase()}`}>
+                        {r.agency ? (
+                          <span title={r.agency.agents.map((a) => `${a.planet} (${a.role}): ${a.houses.join(", ")}`).join("\n")}>
+                            <Houses list={r.agency.houses} />
+                            <span className="ml-2 text-[11px] text-slate-500">via {r.agency.agents.map((a) => ABBR[a.planet]).join(", ")}</span>
+                          </span>
+                        ) : <span className="text-slate-700">·</span>}
+                      </td>
+                    )}
                   </tr>
                 );
               })}
@@ -85,7 +107,7 @@ export const SignificatorView = ({ data, method, setMethod, mode, setMode, selec
                   <tr key={h} data-testid={`sig-house-row-${h}`} onClick={() => onSelect({ type: "cusp", id: h })}
                     className={`cursor-pointer border-t border-white/[0.04] ${selC === h ? "bg-amber-400/10" : "hover:bg-white/[0.03]"}`}>
                     <td className="font-data px-3 py-2 text-amber-100">{h}</td>
-                    {["A", "B", "C", "D"].map((k) => <td key={k} className="px-3"><Planets list={r[k]} onPick={(p) => onSelect({ type: "planet", id: p })} /></td>)}
+                    {["A", "B", "C", "D"].map((k) => <td key={k} className="px-3"><Planets list={r[k]} extra={agency ? r.agency?.[k] : null} onPick={(p) => onSelect({ type: "planet", id: p })} /></td>)}
                   </tr>
                 );
               })}
@@ -95,7 +117,7 @@ export const SignificatorView = ({ data, method, setMethod, mode, setMode, selec
       </div>
       <div className="mt-3 grid gap-x-6 gap-y-1 text-xs text-slate-400 sm:grid-cols-2">
         {(mode === "planet" ? LEVELS : HLEVELS).map(([k, d]) => <div key={k}><span className="font-data mr-2 text-amber-300">{k}</span>{d}</div>)}
-        <div className="text-slate-500 sm:col-span-2">Rahu/Ketu node-agency rules are not applied in this milestone. Results come only from the selected method.</div>
+        <div className="text-slate-500 sm:col-span-2">{agency ? "Node agency: Rahu/Ketu act for their sign lord, planets conjoined within 3°20′ and planets aspecting their sign (7th; Mars 4/8, Jupiter 5/9, Saturn 3/10). Dashed chips (*) are added through agency." : "Node agency is off: Rahu/Ketu show only their own star-lord and occupation."} Results come only from the selected method.</div>
       </div>
     </div>
   );

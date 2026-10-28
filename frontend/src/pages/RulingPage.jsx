@@ -81,7 +81,7 @@ export default function RulingPage() {
 
   const snap = () => {
     if (!d) return;
-    setSnaps([{ id: `s${Date.now().toString(36)}`, utc: d.utc, local: d.local, place: city.name, unique: d.unique, ruling: d.ruling }, ...snaps]);
+    setSnaps([{ id: `s${Date.now().toString(36)}`, utc: d.utc, local: d.local, place: city.name, unique: [...d.unique, ...(d.node_agents || []).map((n) => n.node)], ruling: d.ruling }, ...snaps]);
     toast.success("Snapshot saved");
   };
 
@@ -127,6 +127,16 @@ export default function RulingPage() {
                     <span key={p} className="font-display text-4xl font-semibold" style={{ color: PLANET_COLOR[p] }}>{t(p)}{i < d.unique.length - 1 && <span className="ml-6 text-slate-700">·</span>}</span>
                   ))}
                 </div>
+                {d.node_agents?.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-3" data-testid="rp-node-agents">
+                    {d.node_agents.map((n) => (
+                      <div key={n.node} className="rounded-lg border border-dashed border-cyan-400/40 px-3 py-2">
+                        <span className="font-display text-2xl font-semibold" style={{ color: PLANET_COLOR[n.node] }}>{t(n.node)}</span>
+                        <span className="ml-2 text-xs text-slate-400">{n.reasons.join(" · ")}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.06] sm:grid-cols-2">
                   {d.ruling.map((r) => (
                     <div key={r.key} className="flex items-center justify-between bg-[#0f1524] px-4 py-3" data-testid={`rp-row-${r.key}`}>

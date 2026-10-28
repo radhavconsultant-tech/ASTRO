@@ -28,6 +28,11 @@ Same request as /api/chart. Response: `{ moon: Point, moon_sign, signs: {rising,
 ## POST /api/ruling  → `kp-ruling/1.0`
 Request `{ utc? (ISO, default now), latitude, longitude, tz }`. Response: `{ local, weekday, sunrise_local, before_sunrise, ascendant: Point, moon: Point, ruling: [{role, key, planet}], unique: [planet], notes, calc_ms }`
 
+## GET /api/horary/table → `{ count: 249, rows: [{number, start, end, start_dms, sign, sign_lord, nakshatra, star_lord, sub_lord}] }`
+## POST /api/horary → `kp-chart/1.0` + `horary: {...row, cusp_time_utc, method}`. Request = chart request + `number` (1–249).
+## POST /api/transits?years=3 → `kp-transits/1.0`: `{ current: {Saturn, Jupiter}, events: [{planet, from_sign, to_sign, utc, retrograde, house_from_moon, house_from_asc, sade_sati?}] }`
+## Node agency (in significators): `planets.Rahu.agency = {agents: [{planet, role, houses}], houses}`, `houses["n"].agency = {A,B,C,D: [nodes]}`. Ruling: `node_agents: [{node, sign, reasons}]`.
+
 ## GET /api/sky?utc=ISO  → `kp-sky/1.0`
 - `heliocentric`: `{ Mercury..Neptune, Earth: {longitude (tropical), latitude, distance_au}, Moon: {geocentric: true, ...} }`
 - `geocentric_sidereal`: `{ Name: Point + {retrograde, speed} }` incl. Rahu, Ketu, Uranus, Neptune

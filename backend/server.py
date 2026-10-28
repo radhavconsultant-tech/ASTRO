@@ -13,7 +13,8 @@ from zoneinfo import ZoneInfo
 from kp_engine import build_chart, sky_positions, SOURCE, CONTRACT_VERSION
 from cities import search_cities
 from dasha import build_dasha
-from transits import build_sade_sati, build_ruling
+from transits import build_sade_sati, build_ruling, upcoming_ingresses
+from horary import HORARY, build_horary
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -72,6 +73,33 @@ async def chart(req: ChartRequest):
 async def dasha(req: ChartRequest):
     dt = _local_to_utc(req.date, req.time, req.tz, req.utc_offset)
     return build_dasha(dt)
+
+
+@api_router.post("/transits")
+async def transits(req: ChartRequest, years: float = Query(3, ge=0.5, le=10)):
+    dt = _local_to_utc(req.date, req.time, req.tz, req.utc_offset)
+    natal = build_chart(dt, req.latitude, req.longitude)
+    return upcoming_ingresses(datetime.now(timezone.utc), natal, years)
+
+
+@api_router.get("/horary/table")
+async def horary_table():
+    return {"count": len(HORARY), "rows": HORARY}
+
+
+class HoraryRequest(ChartRequest):
+    number: int = Field(ge=1, le=249)
+
+
+@api_router.post("/horary")
+async def horary(req: HoraryRequest):
+    dt = _local_to_utc(req.date, req.time, req.tz, req.utc_offset)
+    try:
+        data = build_horary(req.number, dt, req.latitude, req.longitude)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    data["input"] = req.model_dump()
+    return data
 
 
 @api_router.post("/sade-sati")

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Printer } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChartWheel } from "@/components/chart/ChartWheel";
@@ -27,6 +28,7 @@ export default function ExplorerPage() {
   const [mode, setMode] = useState("planet");
   const [tab, setTab] = useState("planets");
   const [showOuter, setShowOuter] = useState(false);
+  const [agency, setAgency] = useState(true);
 
   const onSelect = (s) => {
     setSelection(s);
@@ -47,8 +49,15 @@ export default function ExplorerPage() {
 
   return (
     <div className="space-y-8 px-4 pb-16 pt-8 sm:px-6 lg:px-10" data-testid="explorer-page">
-      <PageHeader eyebrow={`${t("explorer")}${active.sample ? ` · ${t("sample")}` : ""}${dataSource === "fixture" ? " · Demo fixture" : ""}`} title={active.name}>
+      <PageHeader eyebrow={`${active.kind === "horary" ? t("horary") : t("explorer")}${active.sample ? ` · ${t("sample")}` : ""}${dataSource === "fixture" ? " · Demo fixture" : ""}`} title={active.name}
+        right={<Link to="/print/report" data-testid="explorer-print-report" className="focus-ring inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-amber-400/40 px-4 py-2 text-sm text-amber-100 hover:bg-amber-400/10"><Printer className="h-4 w-4" />Chart report</Link>}>
         <span className="font-data text-sm text-slate-400">{active.date} · {active.time} · {active.place} ({Number(active.latitude).toFixed(3)}, {Number(active.longitude).toFixed(3)})</span>
+        {chartData.horary && (
+          <div className="mt-3 rounded-lg border border-cyan-400/20 bg-cyan-400/[0.04] px-3 py-2 text-sm text-slate-300" data-testid="explorer-horary-banner">
+            Horary <span className="font-data text-amber-200">#{chartData.horary.number}</span> · Ascendant fixed at {t(chartData.horary.sign)} <span className="font-data">{chartData.horary.start_dms}</span> · star {t(chartData.horary.star_lord)} · sub {t(chartData.horary.sub_lord)}
+            {active.question && <div className="mt-1 italic text-slate-400">“{active.question}”</div>}
+          </div>
+        )}
       </PageHeader>
       <Meta data={chartData} />
 
@@ -58,7 +67,7 @@ export default function ExplorerPage() {
         </Reveal>
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-20">
-            <DetailPanel data={chartData} selection={selection} method={method} />
+            <DetailPanel data={chartData} selection={selection} method={method} agency={agency} />
           </div>
         </div>
       </div>
@@ -74,7 +83,7 @@ export default function ExplorerPage() {
         </TabsContent>
         <TabsContent value="cusps"><CuspTable data={chartData} selection={selection} onSelect={onSelect} /></TabsContent>
         <TabsContent value="significators">
-          <SignificatorView data={chartData} method={method} setMethod={setMethod} mode={mode} setMode={setMode} selection={selection} onSelect={onSelect} />
+          <SignificatorView data={chartData} method={method} setMethod={setMethod} mode={mode} setMode={setMode} selection={selection} onSelect={onSelect} agency={agency} setAgency={setAgency} />
         </TabsContent>
       </Tabs>
     </div>

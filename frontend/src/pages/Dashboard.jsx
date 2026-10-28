@@ -4,6 +4,7 @@ import { ArrowRight, Plus } from "lucide-react";
 import { Observatory } from "@/components/observatory/Observatory";
 import { ChartWheel } from "@/components/chart/ChartWheel";
 import { Reveal } from "@/components/common";
+import { TransitAlerts } from "@/components/TransitAlerts";
 import { useApp } from "@/context/AppContext";
 import { MODULES } from "@/lib/modules";
 import { ABBR, PLANET_COLOR } from "@/lib/kp";
@@ -110,6 +111,7 @@ export default function Dashboard() {
     <div className="space-y-20 px-4 pb-20 pt-6 sm:px-6 lg:px-10" data-testid="dashboard-page">
       <Observatory hero intro><HeroTitle /></Observatory>
       <Reveal><ChartGlance /></Reveal>
+      <Reveal><TransitAlerts /></Reveal>
       <Reveal><Roadmap /></Reveal>
     </div>
   );

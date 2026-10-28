@@ -13,7 +13,7 @@ export const MODULES = [
     summary: "Ruling planets for any moment and place: day lord, Ascendant and Moon sign, star and sub lords.",
     planned: ["Live ruling planets for the current moment", "Saved snapshots for chart rectification", "Comparison with natal significators"],
     depends: ["Ephemeris (available now)", "Ruling planet rules (Phase 2)"] },
-  { id: "horary", key: "horary", group: "questions", icon: HelpCircle, phase: 3,
+  { id: "horary", key: "horary", group: "questions", icon: HelpCircle, phase: 3, to: "/horary", built: true,
     summary: "KP horary charts from a number between 1 and 249.",
     planned: ["Number entry with the matching Ascendant sub-division", "Horary chart in the same explorer", "Question-specific cusp analysis driven by approved rules"],
     depends: ["Horary number table (Phase 3)", "Your rule engine (Phase 3)"] },

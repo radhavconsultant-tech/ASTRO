@@ -21,6 +21,10 @@ App shell (collapsible nav, chart selector, quick search ⌘K, EN/Telugu labels,
 - Ruling planets page (/ruling): POST /api/ruling (kp-ruling/1.0) — live (30s refresh) or custom time, any city; day lord from local sunrise; snapshots saved per browser with match count against natal Asc/Moon lords.
 - Observatory shows running Dasha › Bhukti › Antara for the selected date.
 - Printable A4 Dasha sheet (/print/dasha) in English or Telugu, warm report styling.
+- Horary 1–249 (/horary): GET /api/horary/table (249 subs, sign-split), POST /api/horary — Asc fixed at sub start (Placidus cusps at the moment that day the Asc reaches it, planets at question time); saved as a chart (kind 'horary') and opened in the Explorer with a banner.
+- Node agency: Rahu/Ketu act for sign lord, planets conjoined ≤ 3°20′, planets aspecting their sign (7th; Mars 4/8, Jupiter 5/9, Saturn 3/10); planet view 'Agency' column, house view dashed chips, toggle in Explorer; ruling planets add nodes in sign/star of an RP, conjoined or aspected.
+- Full chart report (/print/report): 3-page A4 (wheel, key facts, planets, cusps, significators both views with agency, Dasha), EN/Telugu.
+- Dashboard transit alerts: POST /api/transits — Saturn & Jupiter sidereal ingresses next 3 years incl. retro, houses from natal Moon & Asc, Sade Sati tags.
 
 ## Backlog
 - P1 (Phase 2): complete. Next is Phase 3.
@@ -28,4 +32,4 @@ App shell (collapsible nav, chart selector, quick search ⌘K, EN/Telugu labels,
 - Nice-to-have: node agency rules for Rahu/Ketu significators, more cities / geocoding.
 
 ## Next tasks
-Horary 1–249; chart report export; Rahu/Ketu agency in ruling planets & significators.
+Career / marriage / finance topic modules once the user's rule engine is connected; report history.

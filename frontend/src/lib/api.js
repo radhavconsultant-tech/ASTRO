@@ -30,6 +30,21 @@ export const fetchSadeSati = async (c) => {
   return data;
 };
 
+export const fetchHorary = async (c) => {
+  const { data } = await need().post("/horary", { ...chartBody(c), number: Number(c.number) });
+  return data;
+};
+
+export const fetchHoraryTable = async () => {
+  const { data } = await need().get("/horary/table");
+  return Array.isArray(data?.rows) ? data.rows : [];
+};
+
+export const fetchTransits = async (c) => {
+  const { data } = await need().post("/transits", chartBody(c), { params: { years: 3 } });
+  return data;
+};
+
 export const fetchRuling = async (body) => {
   const { data } = await need().post("/ruling", body);
   return data;
